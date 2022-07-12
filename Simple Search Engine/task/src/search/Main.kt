@@ -23,20 +23,18 @@ fun main() {
 
         when (menuOpt) {
             "0" -> break
-            "1" -> println("find person.")//findAPerson()
+            "1" -> findAPerson(listNames)
             "2" -> printAllPeople(listNames)
             else -> println("Incorrect option! Try again.")
         }
-
-
-//        repeat(numberOfSearchs) {
-//            println("Enter data to search people:")
-//            val search = readln().lowercase()
-//            searchNames(listNames, search)
-//        }
-//        break
     }
 
+}
+
+fun findAPerson(listNames: MutableList<String>) {
+    println("Enter a name or email to search all suitable people.")
+    val nameOrEmail = readln()
+    searchNames(listNames, nameOrEmail)
 }
 
 fun printAllPeople(listNames: MutableList<String>) {
@@ -48,16 +46,10 @@ fun printAllPeople(listNames: MutableList<String>) {
 }
 
 private fun searchNames(listNames: List<String>, search: String) {
-    var count = 0
     for (i in listNames.indices) {
         if ("[a-zA-Z]*\\s*$search\\w*\\s*[a-zA-Z]*".toRegex().find(listNames[i].lowercase())?.value != null) {
-            if (count == 0) {
-                println("People found:")
-                println(listNames[i])
-                count++
-            } else println(listNames[i])
+            println(listNames[i])
         }
     }
-
-    if (count == 0) println("No matching people found.")
+    println("")
 }
