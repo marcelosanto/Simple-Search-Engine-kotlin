@@ -4,26 +4,47 @@ fun main() {
     val listNames = mutableListOf<String>()
 
     while (true) {
-        println("Enter the number of people:")
-        val numberOfPeoples = readln().toInt()
+        if (listNames.isEmpty()) {
+            println("Enter the number of people:")
+            val numberOfPeoples = readln().toInt()
 
-        println("Enter all people:")
-        repeat(numberOfPeoples) {
-            listNames.add(readln())
+            println("Enter all people:")
+            repeat(numberOfPeoples) {
+                listNames.add(readln())
+            }
         }
 
-        println("Enter the number of search queries:")
-        val numberOfSearchs = readln().toInt()
+        println("=== Menu ===")
+        println("1. Find a person")
+        println("2. Print all people")
+        println("0. Exit")
 
+        val menuOpt = readln()
 
-        repeat(numberOfSearchs) {
-            println("Enter data to search people:")
-            val search = readln().lowercase()
-            searchNames(listNames, search)
+        when (menuOpt) {
+            "0" -> break
+            "1" -> println("find person.")//findAPerson()
+            "2" -> printAllPeople(listNames)
+            else -> println("Incorrect option! Try again.")
         }
-        break
+
+
+//        repeat(numberOfSearchs) {
+//            println("Enter data to search people:")
+//            val search = readln().lowercase()
+//            searchNames(listNames, search)
+//        }
+//        break
     }
 
+}
+
+fun printAllPeople(listNames: MutableList<String>) {
+    println("=== List of people ===")
+    for (i in listNames) {
+        println(i)
+    }
+    println("")
 }
 
 private fun searchNames(listNames: List<String>, search: String) {
