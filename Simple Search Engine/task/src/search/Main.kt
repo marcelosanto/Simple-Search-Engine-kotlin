@@ -27,7 +27,10 @@ fun main(args: Array<String>) {
         val menuOpt = readln()
 
         when (menuOpt) {
-            "0" -> break
+            "0" -> {
+                println("Bye!")
+                break
+            }
             "1" -> findAPerson(file)
             "2" -> printAllPeople(file)
             else -> println("Incorrect option! Try again.")
@@ -37,7 +40,8 @@ fun main(args: Array<String>) {
 }
 
 fun findAPerson(listNames: File) {
-    println("Enter a name or email to search all suitable people.")
+    println("")
+    println("Enter a name or email to search all matching people.")
     val nameOrEmail = readln().lowercase()
     searchNames(listNames, nameOrEmail)
 }
@@ -52,10 +56,28 @@ fun printAllPeople(listNames: File) {
 }
 
 private fun searchNames(listNames: File, search: String) {
+    val names = mutableListOf<String>()
+
     if (listNames.exists()) { // checks if file exists
         val lines = listNames.readLines()
         for (i in lines) {
-            if ("[a-zA-Z]*\\s*@?$search@?\\w*\\s*[a-zA-Z]*".toRegex().find(i.lowercase())?.value != null) {
+            if ("\\s*$search\\s*".toRegex().find(i.lowercase())?.value != null && "[a-zA-Z]{3,}".toRegex()
+                    .find(search)?.value != null
+            ) {
+                names.add(i)
+            }
+        }
+    }
+
+    if (names.isEmpty()) {
+        println("No matching people found.")
+    } else {
+        if (names.size == 1) {
+            println("1 person found:")
+            println(names[0])
+        } else {
+            println("${names.size} persons found:")
+            for (i in names) {
                 println(i)
             }
         }

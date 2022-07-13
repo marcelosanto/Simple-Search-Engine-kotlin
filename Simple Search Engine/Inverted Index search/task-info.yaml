@@ -290,6 +290,19 @@ files:
     }
 
   learner_created: false
+- name: src/search/names.txt
+  visible: true
+  text: |-
+    Dwight Joseph djo@gmail.com
+    Rene Webb webb@gmail.com
+    Katie Jacobs
+    Erick Harrington harrington@gmail.com
+    Myrtle Medina
+    Erick Burgess
+  learner_created: true
 feedback_link: https://hyperskill.org/learn/step/7821#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Congratulations!
+  time: Wed, 13 Jul 2022 00:58:33 UTC
 record: -1
