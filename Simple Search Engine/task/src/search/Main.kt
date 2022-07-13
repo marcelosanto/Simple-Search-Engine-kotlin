@@ -9,16 +9,6 @@ fun main(args: Array<String>) {
     val file = File(fileName)
 
     while (true) {
-//        if (listNames.isEmpty()) {
-//            println("Enter the number of people:")
-//            val numberOfPeoples = readln().toInt()
-//
-//            println("Enter all people:")
-//            repeat(numberOfPeoples) {
-//                listNames.add(readln())
-//            }
-//        }
-
         println("=== Menu ===")
         println("1. Find a person")
         println("2. Print all people")
@@ -41,9 +31,14 @@ fun main(args: Array<String>) {
 
 fun findAPerson(listNames: File) {
     println("")
+
+    println("Select a matching strategy: ALL, ANY, NONE")
+    val strategy = readln()
+
+    println("")
     println("Enter a name or email to search all matching people.")
     val nameOrEmail = readln().lowercase()
-    searchNames(listNames, nameOrEmail)
+    searchNames(listNames, nameOrEmail, strategy)
 }
 
 fun printAllPeople(listNames: File) {
@@ -55,29 +50,77 @@ fun printAllPeople(listNames: File) {
     println("")
 }
 
-private fun searchNames(listNames: File, search: String) {
-    val names = mutableListOf<String>()
+private fun searchNames(listNames: File, _search: String, _strategy: String) {
+    val lista = mutableListOf<String>()
+    val listFilter = mutableListOf<String>()
 
-    if (listNames.exists()) { // checks if file exists
+    if (listNames.exists()) {
         val lines = listNames.readLines()
         for (i in lines) {
-            if ("\\s*$search\\s*".toRegex().find(i.lowercase())?.value != null && "[a-zA-Z]{3,}".toRegex()
-                    .find(search)?.value != null
-            ) {
-                names.add(i)
-            }
+            lista.add(i)
         }
     }
 
-    if (names.isEmpty()) {
+    val achados = mutableSetOf<String>()
+    val search = _search.lowercase().split(" ").toMutableList()
+    val strategy = _strategy.lowercase()
+    if (search.size <= 3) {
+        // All strategy
+        if (strategy == "all") {
+            for (x in search) {
+                for (i in lista) {
+                    if (x.toRegex().find(i.lowercase())?.value != null) {
+                        achados.add(i)
+                    }
+                }
+            }
+
+            for (x in search) {
+                for (i in achados) {
+                    if (x.toRegex().find(i.lowercase())?.value == null) {
+                        achados.remove(i)
+                    }
+                }
+            }
+
+
+            listFilter.addAll(achados)
+
+        } else if (strategy == "any") {
+            for (x in search) {
+                for (i in lista) {
+                    if (x.toRegex().find(i.lowercase())?.value != null) {
+                        achados.add(i)
+                    }
+                }
+            }
+
+            listFilter.addAll(achados)
+        } else if (strategy == "none") {
+            val teste = mutableSetOf<String>()
+            for (x in search) {
+                for (i in lista) {
+                    if (x.toRegex().find(i.lowercase())?.value == null) {
+                        teste.add(i)
+                    } else achados.add(i)
+                }
+            }
+
+            teste.removeAll(achados)
+
+            listFilter.addAll(teste)
+        }
+
+    }
+    if (listFilter.isEmpty()) {
         println("No matching people found.")
     } else {
-        if (names.size == 1) {
+        if (listFilter.size == 1) {
             println("1 person found:")
-            println(names[0])
+            println(listFilter[0])
         } else {
-            println("${names.size} persons found:")
-            for (i in names) {
+            println("${listFilter.size} persons found:")
+            for (i in listFilter) {
                 println(i)
             }
         }
